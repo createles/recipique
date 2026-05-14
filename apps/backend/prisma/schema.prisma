@@ -11,3 +11,36 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  posts    Post[]
+}
+
+model Post {
+  id          Int       @id @default(autoincrement())
+  title       String
+  summary     String?   // Short blurb for list views
+  content     String    // Recipe Instructions
+  ingredients String?   // Comma-separated list of ingredients format: 'amt measurement ingredient'
+  prepTime    String?   // e.g., "15 min"
+  cookTime    String?   // e.g., "45 min"
+  imageUrl    String?   // Link to dish photo
+  published   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  author      User      @relation(fields: [authorId], references: [id])
+  authorId    Int
+  comments    Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  text      String
+  username  String   // Guest name for whoever leaves the comment
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+}
