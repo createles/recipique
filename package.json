@@ -1,0 +1,32 @@
+{
+  "name": "recipique",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/createles/recipique#readme",
+  "bugs": {
+    "url": "https://github.com/createles/recipique/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/createles/recipique.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:backend": "nodemon apps/backend/app.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "prisma": "^7.8.0"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "pg": "^8.20.0"
+  }
+}
