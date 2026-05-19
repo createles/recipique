@@ -33,7 +33,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong in the kitchen!' });
 });
 
-app.use('/', router);
+// Register API route
+app.use('/api', router);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
