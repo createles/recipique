@@ -3,6 +3,7 @@ import { prisma } from '../lib/prisma.js';
 export const createComment = async (req, res) => {
   const { postId } = req.params;
   const { text, username } = req.body;
+  const user = req.user;
 
   if (!text) return res.status(400).json({
     message: 'Missing text; Please include text in the comment body.'
@@ -26,7 +27,7 @@ export const createComment = async (req, res) => {
     }
 
     // Check whether authenticated user is logged in
-    const authorId = req.user.id ? Number(req.user.id) : null;
+    const authorId = user ? Number(user.id) : null;
 
     const comment = await prisma.comment.create({
       data: {
@@ -54,7 +55,7 @@ export const createComment = async (req, res) => {
 export const getCommentsByPostId = async (req, res) => {
   const { postId } = req.params;
    
-  if (!id) {
+  if (!postId) {
     return res.status(400).json({
       message: 'Missing post identification parameter.'
     });
