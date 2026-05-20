@@ -102,12 +102,13 @@ export const deletePost = async (req, res) => {
   const { id } = req.params;
 
   try {
+    const targetPostId = Number(id);
     const deleteResult = await prisma.post.deleteMany({ 
       // used instead of basic .delete due to its constraint
       // of only using unique identifiers in conditional check
       where: {
-        id: id,
-        authorId: user.id
+        id: targetPostId,
+        authorId: Number(user.id)
       }
     }) 
     
@@ -135,10 +136,12 @@ export const updatePost = async (req, res) => {
   const user = req.user;
 
   try {
+    const targetPostId = Number(id);
+
     const updatedPost = await prisma.post.updateMany({
       where: { 
-        id: id, 
-        authorId: user.id
+        id: targetPostId, 
+        authorId: Number(user.id)
       },
       data: {
         title: data.title,
