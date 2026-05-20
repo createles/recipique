@@ -1,7 +1,7 @@
 import { prisma } from '../lib/prisma.js';
 
 export const createComment = async (req, res) => {
-  const { id } = req.params;
+  const { postId } = req.params;
   const { text, username } = req.body;
 
   if (!text) return res.status(400).json({
@@ -52,7 +52,7 @@ export const createComment = async (req, res) => {
 }
 
 export const getCommentsByPostId = async (req, res) => {
-  const { id } = req.params;
+  const { postId } = req.params;
    
   if (!id) {
     return res.status(400).json({
