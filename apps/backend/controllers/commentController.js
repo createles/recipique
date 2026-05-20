@@ -13,7 +13,7 @@ export const createComment = async (req, res) => {
   })
 
   try {
-    const targetPostId = Number(id);
+    const targetPostId = Number(postId);
 
     const postExists = await prisma.post.findUnique({
       where: { id: targetPostId }
@@ -61,7 +61,7 @@ export const getCommentsByPostId = async (req, res) => {
   }
 
   try {
-    const targetPostId = Number(id);
+    const targetPostId = Number(postId);
     
     const comments = await prisma.comment.findMany({
       where: {
