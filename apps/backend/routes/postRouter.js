@@ -8,17 +8,25 @@ import {
   updatePost,
   deletePost
 } from '../controllers/postController.js';
+import { createComment, getCommentsByPostId } from '../controllers/commentController.js';
+import commentRouter from './commentRouter.js';
 
 const postRouter = Router();
 
-// Public routes (No authentication required)
-postRouter.get('/', getAllPublishedPosts);
-postRouter.get('/:id', getPostById);
+// === Static Protected Routes ===
+postRouter.get('/all', verifyToken, getAllPosts); // Including unpublished posts
 
+// === Standard Routes ===
+postRouter.get('/', getAllPublishedPosts);
+postRouter.post('/', verifyToken, createPost); // Protected Create Route
+
+// === Specific Page Routes ====
+postRouter.get('/:id', getPostById);
 // Protected routes (Requires valid JWT verifyToken middleware)
-postRouter.get('/all', verifyToken, getAllPosts);
-postRouter.post('/', verifyToken, createPost);
 postRouter.put('/:id', verifyToken, updatePost);
 postRouter.delete('/:id', verifyToken, deletePost);
+
+// === Mount Comment Router ===
+postRouter.use('/:postId/comments', commentRouter);
 
 export default postRouter;
