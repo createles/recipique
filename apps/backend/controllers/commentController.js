@@ -25,11 +25,16 @@ export const createComment = async (req, res) => {
       });
     }
 
+    // Check whether authenticated user is logged in
+    const authorId = req.user.id ? Number(req.user.id) : null;
+
     const comment = await prisma.comment.create({
       data: {
         text: text,
         username: username,
-        postId: targetPostId
+        postId: targetPostId,
+        // Optional: attach userId to comment if authenticated, null if visitor
+        userId: authorId
       }
     })
 
@@ -60,7 +65,7 @@ export const getCommentsByPostId = async (req, res) => {
     
     const comments = await prisma.comment.findMany({
       where: {
-        postId: Number(postId)
+        postId: targetPostId
       },
       orderBy: {
         createdAt: 'desc'
