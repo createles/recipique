@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createComment, deleteComment, getCommentsByPostId, updateComment } from '../controllers/commentController';
+import { createComment, deleteComment, getCommentsByPostId, updateComment } from '../controllers/commentController.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
 
 const commentRouter = Router({ mergeParams: true }); // passes down :postId from parent postRouter 
