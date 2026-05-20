@@ -83,3 +83,81 @@ export const getCommentsByPostId = async (req, res) => {
     });
   }
 }
+
+export const deleteComment = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const targetComment = Number(id);
+    
+    // Use delete many to prevent exceptions for missing records / record not found
+    const deletedComment = await prisma.comment.deleteMany({
+      where: {
+        id: targetComment
+      }
+    })
+
+    // Check whether a record was deleted or not
+    if (deletedComment.count === 0) {
+      return res.status(404).json({
+        message: `Comment with id ${id} not found.`
+      })
+    }
+
+    return res.status(200).json({
+      message: `Successfully delete comment ${id}.`
+    });
+  } catch (err) {
+    console.error('Failed to delete comment:', err);
+    return res.status(500).json({
+      message: 'Failed to delete comment. Please try again.'
+    });
+  }
+}
+
+export const updateComment = async (req, res) => {
+  const { id } = req.params;
+  const user = req.user;
+  const { text } = req.body;
+
+  if (!text) {
+    return res.status(400).json({
+      message: 'Please provide modified text content.'
+    });
+  }
+
+  try {
+    const targetCommentId = Number(id);
+
+    const updatedComment = await prisma.comment.updateMany({
+      where: {
+        id: targetCommentId,
+        userId: user.id
+      },
+      data: {
+        text: text
+      }
+    })
+
+    if (updatedComment.count === 0) {
+      return res.status(403).json({
+        message: 'Comment not found.'
+      })
+    }
+
+    const updatedCommentPayload = await prisma.comment.findUnique({
+      where: { id: targetCommentId }
+    });
+
+    return res.status(200).json({
+      message: `Successfully edited comment ${id}.`,
+      updatedComment: updatedCommentPayload
+    })
+
+  } catch (err) {
+    console.error('Failed to update comment:', err);
+    return res.status(500).json({
+      message: 'Failed to update comment. Please try again.'
+    });
+  }
+}
