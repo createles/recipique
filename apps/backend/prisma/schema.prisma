@@ -17,6 +17,7 @@ model User {
   username String @unique
   password String
   posts    Post[]
+  comments Comment[]
 }
 
 model Post {
@@ -41,6 +42,9 @@ model Comment {
   text      String
   username  String   // Guest name for whoever leaves the comment
   createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int?       
+  updatedAt DateTime @updatedAt
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int
 }
